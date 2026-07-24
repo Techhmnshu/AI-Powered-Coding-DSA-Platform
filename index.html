@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NeuroCode AI Platform</title>
+    <style>
+      :root {
+        --bg: #07111f;
+        --card: #101b30;
+        --card-2: #14233f;
+        --text: #f3f7ff;
+        --muted: #9fb0cc;
+        --accent: #4cc9f0;
+        --accent-2: #7b61ff;
+        --success: #31d0aa;
+        --warning: #ffb703;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, var(--bg), #13213b);
+        color: var(--text);
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .container {
+        width: min(1200px, 92%);
+        margin: 0 auto;
+      }
+
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 18px 0;
+      }
+
+      .brand {
+        font-size: 1.25rem;
+        font-weight: 700;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 20px;
+        color: var(--muted);
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 24px;
+        padding: 40px 0 28px;
+        align-items: center;
+      }
+
+      .hero-card, .panel {
+        background: rgba(16, 27, 48, 0.9);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 20px;
+        box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
+      }
+
+      .hero-card {
+        padding: 32px;
+      }
+
+      .hero-card h1 {
+        font-size: clamp(2rem, 4vw, 3rem);
+        margin: 0 0 12px;
+      }
+
+      .hero-card p {
+        color: var(--muted);
+        line-height: 1.65;
+      }
+
+      .hero-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 20px;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        padding: 12px 16px;
+        border: none;
+        border-radius: 999px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .btn-primary {
+        background: linear-gradient(90deg, var(--accent), var(--accent-2));
+        color: white;
+      }
+
+      .btn-secondary {
+        background: rgba(255, 255, 255, 0.08);
+        color: var(--text);
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-top: 22px;
+      }
+
+      .stat {
+        background: var(--card-2);
+        border-radius: 16px;
+        padding: 14px;
+      }
+
+      .stat strong {
+        display: block;
+        font-size: 1.2rem;
+        margin-bottom: 4px;
+      }
+
+      .panel {
+        padding: 22px;
+      }
+
+      .panel h2, .section-title {
+        margin: 0 0 14px;
+        font-size: 1.2rem;
+      }
+
+      .challenge-grid, .recommendation-list, .company-grid {
+        display: grid;
+        gap: 14px;
+      }
+
+      .section-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 12px;
+        flex-wrap: wrap;
+      }
+
+      .problem-shell {
+        display: grid;
+        grid-template-columns: 0.9fr 1.1fr;
+        gap: 16px;
+      }
+
+      .problem-list {
+        display: grid;
+        gap: 12px;
+      }
+
+      .problem-card {
+        width: 100%;
+        text-align: left;
+        background: var(--card-2);
+        border: 1px solid transparent;
+        border-radius: 16px;
+        padding: 14px;
+        color: var(--text);
+        cursor: pointer;
+      }
+
+      .problem-card.active {
+        border-color: rgba(76, 201, 240, 0.55);
+        box-shadow: 0 0 0 1px rgba(76, 201, 240, 0.25) inset;
+      }
+
+      .problem-card h3 {
+        margin: 0 0 6px;
+        font-size: 1rem;
+      }
+
+      .problem-card .meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: var(--muted);
+        font-size: 0.9rem;
+        margin-top: 10px;
+      }
+
+      .problem-detail {
+        min-height: 100%;
+      }
+
+      .detail-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin: 12px 0;
+      }
+
+      .detail-metrics {
+        display: grid;
+        gap: 10px;
+        margin-top: 12px;
+      }
+
+      .detail-metrics div {
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: 12px;
+        padding: 10px;
+      }
+
+      .accent-soft {
+        background: rgba(49, 208, 170, 0.15);
+        color: var(--success);
+      }
+
+      .challenge-card, .recommendation-item, .company-card {
+        background: var(--card-2);
+        border-radius: 16px;
+        padding: 16px;
+      }
+
+      .challenge-card h3, .recommendation-item h3 {
+        margin: 0 0 6px;
+        font-size: 1rem;
+      }
+
+      .muted {
+        color: var(--muted);
+      }
+
+      .pill {
+        display: inline-block;
+        margin-top: 8px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 0.8rem;
+        background: rgba(76, 201, 240, 0.14);
+        color: var(--accent);
+      }
+
+      .section {
+        padding: 12px 0 34px;
+      }
+
+      .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+
+      .filter-row {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 10px;
+      }
+
+      .filter-chip {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: transparent;
+        color: var(--muted);
+        border-radius: 999px;
+        padding: 8px 12px;
+        cursor: pointer;
+      }
+
+      .filter-chip.active {
+        color: white;
+        background: rgba(123, 97, 255, 0.22);
+        border-color: rgba(123, 97, 255, 0.45);
+      }
+
+      textarea, input {
+        width: 100%;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 14px;
+        background: #0c1425;
+        color: var(--text);
+        padding: 12px 14px;
+        margin-top: 8px;
+      }
+
+      textarea {
+        min-height: 120px;
+        resize: vertical;
+      }
+
+      .output-box {
+        margin-top: 12px;
+        padding: 12px;
+        border-radius: 14px;
+        background: #0c1425;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        min-height: 90px;
+        white-space: pre-wrap;
+        color: #dce9ff;
+      }
+
+      .progress-track {
+        width: 100%;
+        height: 10px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.08);
+        overflow: hidden;
+        margin: 10px 0;
+      }
+
+      .progress-fill {
+        height: 100%;
+        width: 35%;
+        background: linear-gradient(90deg, var(--success), var(--accent));
+        transition: width 0.3s ease;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 8px;
+      }
+
+      th, td {
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .company-list {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 10px;
+      }
+
+      .company-list button {
+        border: none;
+        border-radius: 999px;
+        padding: 8px 12px;
+        background: rgba(255, 255, 255, 0.08);
+        color: var(--text);
+        cursor: pointer;
+      }
+
+      .company-list button.active {
+        background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      }
+
+      footer {
+        text-align: center;
+        padding: 24px 0 40px;
+        color: var(--muted);
+      }
+
+      @media (max-width: 900px) {
+        .hero, .grid-2 {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header class="topbar">
+        <div class="brand">🧠 NeuroCode AI</div>
+        <nav class="nav-links">
+          <a href="#challenges">Challenges</a>
+          <a href="#review">AI Review</a>
+          <a href="#progress">Progress</a>
+          <a href="#prep">Prep</a>
+        </nav>
+      </header>
+
+      <section class="hero">
+        <div class="hero-card">
+          <h1>Practice, compete, and interview better with AI.</h1>
+          <p>
+            A next-generation coding platform for developers who want interactive challenges,
+            personalized recommendations, instant feedback, and company-focused prep.
+          </p>
+          <div class="hero-actions">
+            <button class="btn btn-primary">Start a Challenge</button>
+            <button class="btn btn-secondary">Explore AI Suggestions</button>
+          </div>
+          <div class="stats">
+            <div class="stat"><strong>120+</strong><span>Curated Problems</span></div>
+            <div class="stat"><strong>24/7</strong><span>AI Review</span></div>
+            <div class="stat"><strong>#1</strong><span>Interview Prep</span></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Today’s Focus</h2>
+          <p class="muted">Sharpen your graph and dynamic programming skills with a guided roadmap.</p>
+          <div class="challenge-grid">
+            <div class="challenge-card">
+              <h3>Graph Shortest Path</h3>
+              <p class="muted">Solve a real interview problem in under 25 minutes.</p>
+              <span class="pill">Medium</span>
+            </div>
+            <div class="challenge-card">
+              <h3>Two Sum Variations</h3>
+              <p class="muted">Practice optimized hashing and edge cases.</p>
+              <span class="pill">Easy</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="challenges">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title">Featured Coding Problems</h2>
+            <p class="muted">Choose a challenge to see the prompt, constraints, and starter code.</p>
+          </div>
+          <span class="pill">4 New Problems</span>
+        </div>
+
+        <div class="problem-shell">
+          <div class="problem-list" id="problemList">
+            <button class="problem-card active" data-title="Two Sum" data-difficulty="Easy" data-type="Array" data-description="Given an array of integers and a target, return the indices of the two numbers that add up to the target." data-example="Input: nums = [2,7,11,15], target = 9<br>Output: [0,1]" data-constraints="2 ≤ nums.length ≤ 10^4, -10^9 ≤ nums[i] ≤ 10^9" data-hint="Use a hash map to keep track of seen values and their indices." data-starter="function twoSum(nums, target) {\n  const map = new Map();\n  for (let i = 0; i < nums.length; i++) {\n    const complement = target - nums[i];\n    if (map.has(complement)) return [map.get(complement), i];\n    map.set(nums[i], i);\n  }\n  return [];\n}">
+              <h3>Two Sum</h3>
+              <p class="muted">Find two indices that sum to the target.</p>
+              <div class="meta"><span>Array</span><span>Easy</span></div>
+            </button>
+
+            <button class="problem-card" data-title="Valid Parentheses" data-difficulty="Easy" data-type="Stack" data-description="Determine whether the given string of parentheses is valid by matching opening and closing pairs." data-example="Input: (() )<br>Output: true" data-constraints="1 ≤ s.length ≤ 10^4" data-hint="Push opening brackets and pop when the matching closing bracket appears." data-starter="function isValid(s) {\n  const stack = [];\n  const map = {')': '(', '}': '{', ']': '['};\n  for (const ch of s) {\n    if (!map[ch]) stack.push(ch);\n    else if (stack.pop() !== map[ch]) return false;\n  }\n  return stack.length === 0;\n}">
+              <h3>Valid Parentheses</h3>
+              <p class="muted">Check balanced bracket sequences.</p>
+              <div class="meta"><span>Stack</span><span>Easy</span></div>
+            </button>
+
+            <button class="problem-card" data-title="Longest Substring" data-difficulty="Medium" data-type="Sliding Window" data-description="Return the length of the longest substring without repeating characters." data-example="Input: abcabcbb<br>Output: 3" data-constraints="0 ≤ s.length ≤ 5 × 10^4" data-hint="Use a sliding window and a map of the most recent index for each character." data-starter="function lengthOfLongestSubstring(s) {\n  let left = 0;\n  const map = new Map();\n  let best = 0;\n  for (let right = 0; right < s.length; right++) {\n    if (map.has(s[right])) left = Math.max(left, map.get(s[right]) + 1);\n    map.set(s[right], right);\n    best = Math.max(best, right - left + 1);\n  }\n  return best;\n}">
+              <h3>Longest Substring</h3>
+              <p class="muted">Use sliding window for repeated-character challenges.</p>
+              <div class="meta"><span>String</span><span>Medium</span></div>
+            </button>
+
+            <button class="problem-card" data-title="Merge Intervals" data-difficulty="Medium" data-type="Sorting" data-description="Merge all overlapping intervals so that each interval is non-overlapping and sorted." data-example="Input: [[1,3],[2,6],[8,10],[15,18]]<br>Output: [[1,6],[8,10],[15,18]]" data-constraints="1 ≤ intervals.length ≤ 10^4" data-hint="Sort by the start time, and merge when the next interval starts before the current end." data-starter="function mergeIntervals(intervals) {\n  intervals.sort((a, b) => a[0] - b[0]);\n  const merged = [];\n  for (const interval of intervals) {\n    if (!merged.length || interval[0] > merged[merged.length - 1][1]) merged.push(interval);\n    else merged[merged.length - 1][1] = Math.max(merged[merged.length - 1][1], interval[1]);\n  }\n  return merged;\n}">
+              <h3>Merge Intervals</h3>
+              <p class="muted">Merge overlapping ranges efficiently.</p>
+              <div class="meta"><span>Sorting</span><span>Medium</span></div>
+            </button>
+          </div>
+
+          <div class="panel problem-detail">
+            <div class="detail-actions">
+              <span class="pill" id="detailDifficulty">Easy</span>
+              <span class="pill accent-soft" id="detailType">Array</span>
+            </div>
+            <h3 id="detailTitle">Two Sum</h3>
+            <p id="detailDescription" class="muted"></p>
+            <div class="detail-metrics">
+              <div>
+                <strong>Example</strong>
+                <p id="detailExample" class="muted"></p>
+              </div>
+              <div>
+                <strong>Constraints</strong>
+                <p id="detailConstraints" class="muted"></p>
+              </div>
+            </div>
+            <div class="detail-actions">
+              <button class="btn btn-primary" id="loadStarterBtn">Load Starter Code</button>
+              <button class="btn btn-secondary" id="hintBtn">Show Hint</button>
+            </div>
+            <p id="detailHint" class="muted"></p>
+            <textarea id="problemCode" placeholder="Starter code will appear here..."></textarea>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="grid-2">
+          <div class="panel">
+            <h2>AI Problem Recommendations</h2>
+            <div class="filter-row">
+              <button class="filter-chip active" data-filter="all">All</button>
+              <button class="filter-chip" data-filter="easy">Easy</button>
+              <button class="filter-chip" data-filter="medium">Medium</button>
+              <button class="filter-chip" data-filter="hard">Hard</button>
+            </div>
+            <div class="recommendation-list">
+              <div class="recommendation-item" data-level="easy">
+                <h3>Valid Parentheses</h3>
+                <p class="muted">Recommended because you solved 3 stack problems this week.</p>
+              </div>
+              <div class="recommendation-item" data-level="medium">
+                <h3>Longest Substring Without Repeating</h3>
+                <p class="muted">Great fit for your recent sliding window practice.</p>
+              </div>
+              <div class="recommendation-item" data-level="hard">
+                <h3>Median of Two Sorted Arrays</h3>
+                <p class="muted">Ideal next step for your binary search growth path.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel" id="review">
+            <h2>AI Code Review</h2>
+            <p class="muted">Paste your code and get instant suggestions for clarity, complexity, and edge cases.</p>
+            <textarea id="codeInput" placeholder="function twoSum(nums, target) { ... }"></textarea>
+            <button class="btn btn-primary" id="reviewBtn">Review Code</button>
+            <div class="output-box" id="reviewOutput">Waiting for analysis...</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="grid-2">
+          <div class="panel">
+            <h2>Real-time Code Execution</h2>
+            <p class="muted">Try a live JavaScript runner with instant feedback.</p>
+            <textarea id="runnerInput">console.log('Hello from NeuroCode');</textarea>
+            <button class="btn btn-primary" id="runBtn">Run Code</button>
+            <div class="output-box" id="runOutput">Press run to execute your snippet.</div>
+          </div>
+
+          <div class="panel" id="progress">
+            <h2>Progress Tracking & Leaderboards</h2>
+            <p class="muted">Stay motivated with streaks, milestones, and peer rankings.</p>
+            <div class="progress-track">
+              <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <p id="progressText">35% of this week’s target completed</p>
+            <table>
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Developer</th>
+                  <th>Score</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>1</td><td>Asha</td><td>9,820</td></tr>
+                <tr><td>2</td><td>Rohan</td><td>9,210</td></tr>
+                <tr><td>3</td><td>You</td><td>8,940</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="prep">
+        <div class="panel">
+          <h2>Company-wise Interview Preparation</h2>
+          <div class="company-list">
+            <button class="active" data-company="Google">Google</button>
+            <button data-company="Microsoft">Microsoft</button>
+            <button data-company="Amazon">Amazon</button>
+            <button data-company="Meta">Meta</button>
+          </div>
+          <div class="company-card" id="companyCard">
+            <h3 id="companyTitle">Google</h3>
+            <p id="companyDescription" class="muted">Focus on arrays, graphs, and system design with mock interviews.</p>
+            <ul id="companyTopics"></ul>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <footer>Built for ambitious developers preparing for the next big opportunity.</footer>
+
+    <script>
+      const progressFill = document.getElementById('progressFill');
+      const progressText = document.getElementById('progressText');
+      let currentProgress = 35;
+
+      document.querySelectorAll('.challenge-card button').forEach((button) => {
+        button.addEventListener('click', () => {
+          currentProgress = Math.min(100, currentProgress + Number(button.dataset.progress));
+          progressFill.style.width = `${currentProgress}%`;
+          progressText.textContent = `${currentProgress}% of this week’s target completed`;
+          button.textContent = 'Started ✓';
+          button.disabled = true;
+        });
+      });
+
+      const problemCards = document.querySelectorAll('.problem-card');
+      const detailTitle = document.getElementById('detailTitle');
+      const detailDifficulty = document.getElementById('detailDifficulty');
+      const detailType = document.getElementById('detailType');
+      const detailDescription = document.getElementById('detailDescription');
+      const detailExample = document.getElementById('detailExample');
+      const detailConstraints = document.getElementById('detailConstraints');
+      const detailHint = document.getElementById('detailHint');
+      const problemCode = document.getElementById('problemCode');
+      const loadStarterBtn = document.getElementById('loadStarterBtn');
+      const hintBtn = document.getElementById('hintBtn');
+
+      const problemData = {
+        'Two Sum': {
+          difficulty: 'Easy',
+          type: 'Array',
+          description: 'Given an array of integers and a target, return the indices of the two numbers that add up to the target.',
+          example: 'Input: nums = [2,7,11,15], target = 9<br>Output: [0,1]',
+          constraints: '2 ≤ nums.length ≤ 10^4, -10^9 ≤ nums[i] ≤ 10^9',
+          hint: 'Use a hash map to keep track of seen values and their indices.',
+          starter: `function twoSum(nums, target) {\n  const map = new Map();\n  for (let i = 0; i < nums.length; i++) {\n    const complement = target - nums[i];\n    if (map.has(complement)) return [map.get(complement), i];\n    map.set(nums[i], i);\n  }\n  return [];\n}`
+        },
+        'Valid Parentheses': {
+          difficulty: 'Easy',
+          type: 'Stack',
+          description: 'Determine whether the given string of parentheses is valid by matching opening and closing pairs.',
+          example: 'Input: "()[]{}"<br>Output: true',
+          constraints: '1 ≤ s.length ≤ 10^4',
+          hint: 'Push opening brackets and pop when the matching closing bracket appears.',
+          starter: `function isValid(s) {\n  const stack = [];\n  const map = {')': '(', '}': '{', ']': '['};\n  for (const ch of s) {\n    if (!map[ch]) stack.push(ch);\n    else if (stack.pop() !== map[ch]) return false;\n  }\n  return stack.length === 0;\n}`
+        },
+        'Longest Substring': {
+          difficulty: 'Medium',
+          type: 'Sliding Window',
+          description: 'Return the length of the longest substring without repeating characters.',
+          example: 'Input: abcabcbb<br>Output: 3',
+          constraints: '0 ≤ s.length ≤ 5 × 10^4',
+          hint: 'Use a sliding window and a map of the most recent index for each character.',
+          starter: `function lengthOfLongestSubstring(s) {\n  let left = 0;\n  const map = new Map();\n  let best = 0;\n  for (let right = 0; right < s.length; right++) {\n    if (map.has(s[right])) left = Math.max(left, map.get(s[right]) + 1);\n    map.set(s[right], right);\n    best = Math.max(best, right - left + 1);\n  }\n  return best;\n}`
+        },
+        'Merge Intervals': {
+          difficulty: 'Medium',
+          type: 'Sorting',
+          description: 'Merge all overlapping intervals so that each interval is non-overlapping and sorted.',
+          example: 'Input: [[1,3],[2,6],[8,10],[15,18]]<br>Output: [[1,6],[8,10],[15,18]]',
+          constraints: '1 ≤ intervals.length ≤ 10^4',
+          hint: 'Sort by the start time, and merge when the next interval starts before the current end.',
+          starter: `function mergeIntervals(intervals) {\n  intervals.sort((a, b) => a[0] - b[0]);\n  const merged = [];\n  for (const interval of intervals) {\n    if (!merged.length || interval[0] > merged[merged.length - 1][1]) merged.push(interval);\n    else merged[merged.length - 1][1] = Math.max(merged[merged.length - 1][1], interval[1]);\n  }\n  return merged;\n}`
+        }
+      };
+
+      function renderProblem(title) {
+        const problem = problemData[title];
+        detailTitle.textContent = title;
+        detailDifficulty.textContent = problem.difficulty;
+        detailType.textContent = problem.type;
+        detailDescription.textContent = problem.description;
+        detailExample.innerHTML = problem.example;
+        detailConstraints.textContent = problem.constraints;
+        detailHint.textContent = '';
+        problemCode.value = problem.starter;
+      }
+
+      problemCards.forEach((card) => {
+        card.addEventListener('click', () => {
+          problemCards.forEach((item) => item.classList.remove('active'));
+          card.classList.add('active');
+          renderProblem(card.dataset.title);
+        });
+      });
+
+      loadStarterBtn.addEventListener('click', () => {
+        const activeTitle = document.querySelector('.problem-card.active').dataset.title;
+        problemCode.value = problemData[activeTitle].starter;
+      });
+
+      hintBtn.addEventListener('click', () => {
+        const activeTitle = document.querySelector('.problem-card.active').dataset.title;
+        detailHint.textContent = problemData[activeTitle].hint;
+      });
+
+      renderProblem('Two Sum');
+
+      const filterButtons = document.querySelectorAll('.filter-chip');
+      const recommendationItems = document.querySelectorAll('.recommendation-item');
+
+      filterButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+          filterButtons.forEach((chip) => chip.classList.remove('active'));
+          button.classList.add('active');
+          const level = button.dataset.filter;
+
+          recommendationItems.forEach((item) => {
+            const shouldShow = level === 'all' || item.dataset.level === level;
+            item.style.display = shouldShow ? 'block' : 'none';
+          });
+        });
+      });
+
+      const reviewBtn = document.getElementById('reviewBtn');
+      const reviewOutput = document.getElementById('reviewOutput');
+      const codeInput = document.getElementById('codeInput');
+
+      reviewBtn.addEventListener('click', () => {
+        const code = codeInput.value.trim();
+        const suggestions = [];
+
+        if (!code) {
+          reviewOutput.textContent = 'Please paste a snippet to review.';
+          return;
+        }
+
+        if (!code.includes('return')) {
+          suggestions.push('Add a clear return value for easier debugging.');
+        }
+
+        if (code.includes('for')) {
+          suggestions.push('Consider using a more descriptive loop variable for readability.');
+        }
+
+        if (code.includes('if')) {
+          suggestions.push('You have a branching condition; add a guard for null or empty input.');
+        }
+
+        if (code.length > 180) {
+          suggestions.push('The function is long; break it into helper steps for maintainability.');
+        }
+
+        reviewOutput.textContent = `AI Review:\n- ${suggestions.join('\n- ')}`;
+      });
+
+      const runBtn = document.getElementById('runBtn');
+      const runOutput = document.getElementById('runOutput');
+      const runnerInput = document.getElementById('runnerInput');
+
+      runBtn.addEventListener('click', () => {
+        const code = runnerInput.value.trim();
+        if (!code) {
+          runOutput.textContent = 'Enter a snippet to execute.';
+          return;
+        }
+
+        const logs = [];
+        const consoleProxy = {
+          log: (...args) => logs.push(args.map((value) => String(value)).join(' ')),
+        };
+
+        try {
+          const runner = new Function('console', `${code}`);
+          runner(consoleProxy);
+          runOutput.textContent = logs.length ? logs.join('\n') : 'Execution completed without output.';
+        } catch (error) {
+          runOutput.textContent = `Runtime error: ${error.message}`;
+        }
+      });
+
+      const companyButtons = document.querySelectorAll('.company-list button');
+      const companyTitle = document.getElementById('companyTitle');
+      const companyDescription = document.getElementById('companyDescription');
+      const companyTopics = document.getElementById('companyTopics');
+
+      const companyData = {
+        Google: {
+          description: 'Focus on arrays, graphs, and system design with mock interviews.',
+          topics: ['Two-pointer', 'Topological sort', 'Designing scalable APIs'],
+        },
+        Microsoft: {
+          description: 'Sharpen your data structure fluency and debugging mindset.',
+          topics: ['Hash maps', 'Binary trees', 'Concurrency basics'],
+        },
+        Amazon: {
+          description: 'Practice leadership principles through problem-solving drills.',
+          topics: ['Sliding window', 'Trie problems', 'Operational complexity'],
+        },
+        Meta: {
+          description: 'Prepare for product-focused engineering and optimization questions.',
+          topics: ['DFS & BFS', 'Priority queues', 'Performance profiling'],
+        },
+      };
+
+      companyButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+          companyButtons.forEach((chip) => chip.classList.remove('active'));
+          button.classList.add('active');
+          const company = button.dataset.company;
+          companyTitle.textContent = company;
+          companyDescription.textContent = companyData[company].description;
+          companyTopics.innerHTML = companyData[company].topics.map((topic) => `<li>${topic}</li>`).join('');
+        });
+      });
+    </script>
+  </body>
+</html>
